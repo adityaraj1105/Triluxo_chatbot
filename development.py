@@ -15,7 +15,6 @@ from transformers import AutoTokenizer, AutoModel
 import torch
 import os
 
-# Data extraction
 url = "https://brainlox.com/courses/category/technical"
 response = requests.get(url)
 soup = BeautifulSoup(response.content, "html.parser")
@@ -36,11 +35,9 @@ for course in soup.find_all('div', class_='single-courses-box'):
         "link": link
     })
 
-# Check if courses were extracted
 print(f"Found {len(courses)} courses.")
 print(courses)
 
-# Embeddings generation
 model_name = 'sentence-transformers/all-MiniLM-L6-v2'  # Example model
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 model = AutoModel.from_pretrained(model_name)
@@ -54,7 +51,6 @@ def get_embeddings(texts):
 texts = [course['description'] for course in courses]
 course_embeddings = get_embeddings(texts)
 
-# Save the vector store
 from langchain.vectorstores import FAISS
 from langchain.docstore.in_memory import InMemoryDocstore
 import faiss
